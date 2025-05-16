@@ -8,5 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <Button
+        android:id="@+id/buttonOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/place_order"
+        android:layout_margin="16dp"
+        style="@style/Widget.MyGroceryApp.Button.Outlined"/>
+
+
 </LinearLayout>
 

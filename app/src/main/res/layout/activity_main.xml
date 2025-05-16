@@ -1,21 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:text="Dostępne towary">
 
-    <Button
-        android:id="@+id/buttonOrder"
+    <Spinner
+        android:id="@+id/spinner_filter_department"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Zamów produkty"/>
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="8dp"/>
+
+    <Button
+        android:id="@+id/buttonOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/place_order"
+        android:layout_margin="16dp"
+        style="@style/Widget.MyGroceryApp.Button.Outlined"
+        app:icon="@drawable/ic_shopping_cart"
+        app:iconTint="@color/purple_500"/>
+    <Button
+        android:id="@+id/buttonAddProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dodaj produkt do bazy danych"
+        android:layout_margin="16dp"
+        style="@style/Widget.MyGroceryApp.Button"/>
+    <Button
+        android:id="@+id/buttonDeleteProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Usuń produkt do bazy danych"
+        android:layout_margin="12dp"
+        android:backgroundTint="@color/design_default_color_error"
+        android:textColor="@color/white"/>
 
 </LinearLayout>

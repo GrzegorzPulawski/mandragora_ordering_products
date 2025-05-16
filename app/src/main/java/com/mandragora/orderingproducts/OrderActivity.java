@@ -7,26 +7,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class OrderActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
-    private List<Product> productList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ArrayList<Product> orderedProductsList = (ArrayList<Product>) getIntent().getSerializableExtra("ORDERED_PRODUCTS");
-       if (orderedProductsList == null){
-           orderedProductsList = new ArrayList<>();
-       }
+        ArrayList<Product> orderedProductsList =
+                (ArrayList<Product>) getIntent().getSerializableExtra("ORDERED_PRODUCTS");
 
-        adapter = new ProductAdapter(orderedProductsList);
+        if (orderedProductsList == null) {
+            orderedProductsList = new ArrayList<>();
+        }
+
+        adapter = new ProductAdapter(orderedProductsList, false); // tylko do podglądu
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }

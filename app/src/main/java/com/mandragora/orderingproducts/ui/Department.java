@@ -2,6 +2,7 @@ package com.mandragora.orderingproducts.ui;
 
 public enum Department {
     All("WSZYSTKIE DZIAŁY"),
+    ALKOHOL("Alkohol"),
     BAR("BAR"),
     PEPSI("PEPSI"),
     MIESO("MIĘSA"),
@@ -10,7 +11,9 @@ public enum Department {
     WARZYWA("WARZYWA"),
     MROZONKI("MROŻONKI"),
     RYBY("RYBY"),
-    SYPKIE("SYPKIE");
+    SYPKIE("SYPKIE"),
+    PIECZYWO("PIECZYWO"),
+    OPAKOWANIA("OPAKOWANIA");
 
     private final String displayEnum;
 

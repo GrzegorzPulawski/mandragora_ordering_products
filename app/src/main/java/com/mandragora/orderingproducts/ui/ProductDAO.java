@@ -17,8 +17,8 @@ public interface ProductDAO {
     void insert(Product product);
     @Insert
     void insertAll(Product...products);
-    @Delete
-    void delete(Product product);
+    @Query("DELETE FROM Products WHERE id =:productId")
+    void deleteById(int productId);
     @Update
     void update(Product product);
     @Query("SELECT * FROM  Products WHERE department =:department")

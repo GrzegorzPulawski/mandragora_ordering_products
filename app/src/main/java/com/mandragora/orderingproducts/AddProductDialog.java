@@ -1,4 +1,4 @@
-package com.mandragora.orderingproducts.ui;
+package com.mandragora.orderingproducts;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,10 +10,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mandragora.orderingproducts.Product;
-import com.mandragora.orderingproducts.R;
-
-import java.util.Arrays;
+import com.mandragora.orderingproducts.ui.AppDatabase;
+import com.mandragora.orderingproducts.ui.Department;
+import com.mandragora.orderingproducts.ui.Unit;
 
 public class AddProductDialog {
     public interface OnProductListener{

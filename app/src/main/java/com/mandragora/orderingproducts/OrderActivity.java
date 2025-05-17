@@ -1,6 +1,10 @@
 package com.mandragora.orderingproducts;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,5 +34,35 @@ public class OrderActivity extends AppCompatActivity {
         adapter = new ProductAdapter(orderedProductsList, false); // tylko do podglądu
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        Button buttonSenSMS = findViewById(R.id.buttonSendSms);
+        ArrayList<Product> finalProductList = orderedProductsList;
+        buttonSenSMS.setOnClickListener(v->{
+            if (finalProductList.isEmpty()){
+                Toast.makeText(this, "Brak produktów do zamówienia", Toast.LENGTH_SHORT).show();
+            return;
+            }
+            StringBuilder smsBody = new StringBuilder("Zamówienie:\n");
+            for (Product product : finalProductList){
+                smsBody.append("- ")
+                        .append(product.getName())
+                        .append(" (")
+                        .append(product.getQuantity())
+                        .append(" ")
+                        .append(product.getUnit())
+                        .append(")\n");
+
+                Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                smsIntent.setData(Uri.parse("smsto:123456789")); // <-- numer telefonu
+                smsIntent.putExtra("sms_body", smsBody.toString());
+
+                if (smsIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(smsIntent);
+                } else {
+                    Toast.makeText(this, "Brak aplikacji SMS", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 }

@@ -47,6 +47,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-" />
+    <ImageButton
+        android:id="@+id/buttonDeleteProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_delete"
+        android:contentDescription="Usuń"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
 </LinearLayout>
 
 

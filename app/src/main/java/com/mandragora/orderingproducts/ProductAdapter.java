@@ -1,13 +1,16 @@
 package com.mandragora.orderingproducts;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -33,6 +36,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
+        Context context = holder.itemView.getContext();
 
         // Always update these views
         holder.textViewName.setText(product.getName());
@@ -69,11 +73,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                     notifyItemChanged((currentPosition));
                 }
             });
+
+            holder.deleteButton.setOnClickListener(v -> {
+                ProductDeleteDialogFragment dialog = ProductDeleteDialogFragment.newInstance(product.getId(), product.getName());
+                dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "deleteDialog");
+            });
+
         } else {
             // OrderActivity Mode - hide interactive elements
             holder.checkBox.setVisibility(View.GONE);
             holder.addButton.setVisibility(View.GONE);
             holder.decreaseButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
 
         }
     }
@@ -90,6 +101,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         final Button addButton;
         final Button decreaseButton;
         final TextView textViewDepartment;
+        final ImageButton deleteButton;
 
 
         public ProductViewHolder(@NonNull View itemView) {
@@ -100,6 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             checkBox = itemView.findViewById(R.id.checkBoxSelect);
             addButton = itemView.findViewById(R.id.buttonIncrease);
             decreaseButton = itemView.findViewById(R.id.buttonDecrease);
+            deleteButton = itemView.findViewById(R.id.buttonDeleteProduct);
         }
     }
 }

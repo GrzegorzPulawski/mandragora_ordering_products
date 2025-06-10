@@ -42,8 +42,8 @@ public class OrderActivity extends AppCompatActivity {
                 Toast.makeText(this, "Brak produktów do zamówienia", Toast.LENGTH_SHORT).show();
             return;
             }
-            StringBuilder smsBody = new StringBuilder("Zamówienie:\n");
-            for (Product product : finalProductList){
+            StringBuilder smsBody = new StringBuilder("Zamówienie dla Mandragora Łeba:\n");
+            for (Product product : finalProductList) {
                 smsBody.append("- ")
                         .append(product.getName())
                         .append(" (")
@@ -51,18 +51,20 @@ public class OrderActivity extends AppCompatActivity {
                         .append(" ")
                         .append(product.getUnit())
                         .append(")\n");
-
+            }
                 Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-                smsIntent.setData(Uri.parse("smsto:123456789")); // <-- numer telefonu
+                smsIntent.setData(Uri.parse("smsto:")); // <-- numer telefonu
                 smsIntent.putExtra("sms_body", smsBody.toString());
 
                 if (smsIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(smsIntent);
+
+
                 } else {
                     Toast.makeText(this, "Brak aplikacji SMS", Toast.LENGTH_SHORT).show();
                 }
 
-            }
+
         });
     }
 }

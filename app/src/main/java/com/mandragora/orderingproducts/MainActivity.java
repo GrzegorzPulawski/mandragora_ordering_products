@@ -22,14 +22,18 @@ import com.mandragora.orderingproducts.ui.Department;
 import com.mandragora.orderingproducts.ui.DepartmentFilterHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements ProductDeleteDialogFragment.ProductDeletedListener{
     private ArrayList<Product> productList;
+    private Department currentFilterDepartment = null;
+
     RecyclerView recyclerView;
     ProductAdapter adapter;
     AppDatabase db;
     Spinner spinnerFilter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +49,9 @@ public class MainActivity extends AppCompatActivity implements ProductDeleteDial
         adapter = new ProductAdapter(productList, true);
         setupRecyclerView();
         setupOrderButton();
-        setupAddProductButton();
         setupDepartmentFilter();
+        setupAddProductButton();
+
 
     }
 
@@ -67,9 +72,25 @@ public class MainActivity extends AppCompatActivity implements ProductDeleteDial
                 this,
                 spinnerFilter,
                 filteredProducts -> {
+                    currentFilterDepartment = spinnerFilter.getSelectedItemPosition() == 0
+                            ? null  // "Wszystkie działy"
+                            : Department.values()[spinnerFilter.getSelectedItemPosition() - 1];
+
+                    Map<Integer, Boolean> selectionMap = new HashMap<>();
+                    for (Product p : productList) {
+                        selectionMap.put(p.getId(), p.isToOrder());
+                    }
                     productList.clear();
-                    productList.addAll(filteredProducts);
+                    for (Product filtered : filteredProducts) {
+                        Boolean wasSelected = selectionMap.get(filtered.getId());
+                        if (wasSelected != null) {
+                            filtered.setToOrder(wasSelected);
+                        }
+                        productList.add(filtered);
+                    }
+
                     adapter.notifyDataSetChanged();
+
                 }
         );
     }
@@ -104,9 +125,16 @@ public class MainActivity extends AppCompatActivity implements ProductDeleteDial
     }
     private void setupProductList() {
         productList = new ArrayList<>();
-        // Pobranie produktów z bazy
-        productList.addAll(db.productDao().getAll());
+        Department selectedDepartment = DepartmentFilterHelper.getCurrentSelectedDepartment(spinnerFilter);
+        productList.clear();
+
+        if (selectedDepartment == null) {
+            productList.addAll(db.productDao().getAll());
+        } else {
+            productList.addAll(db.productDao().getByDepartment(currentFilterDepartment));
+        }
     }
+
     private void insertDataIfEmpty(AppDatabase db){
         if (db.productDao().getAll().isEmpty()){
             Log.d("DB_INIT", "Liczba produktów w bazie: " + db.productDao().getAll().size());
@@ -278,16 +306,38 @@ public class MainActivity extends AppCompatActivity implements ProductDeleteDial
         }
     }
     private void setupAddProductButton() {
-        findViewById(R.id.buttonAddProduct).setOnClickListener(v -> AddProductDialog.showAddProductDialog(this, () -> {
-            productList.clear();
-            productList.addAll(AppDatabase.getInstance(this).productDao().getAll());
-            adapter.notifyDataSetChanged();
-        }));
+        findViewById(R.id.buttonAddProduct).setOnClickListener(v ->
+                AddProductDialog.showAddProductDialog(this, this::refreshFilteredProductList)
+        );
     }
+
+
     @Override
     public void onProductDeleted() {
+        spinnerFilter.setSelection(spinnerFilter.getSelectedItemPosition());
+        refreshFilteredProductList();
+
+    }
+    private void refreshFilteredProductList() {
+        Department selected = DepartmentFilterHelper.getCurrentSelectedDepartment(spinnerFilter);
+        List<Product> filtered = (selected == Department.All || selected == null)
+                ? db.productDao().getAll()
+                : db.productDao().getByDepartment(selected);
+
+        Map<Integer, Boolean> selectionMap = new HashMap<>();
+        for (Product p : productList) {
+            selectionMap.put(p.getId(), p.isToOrder());
+        }
+
         productList.clear();
-        productList.addAll(db.productDao().getAll());
+        for (Product filteredItem : filtered) {
+            Boolean wasSelected = selectionMap.get(filteredItem.getId());
+            if (wasSelected != null) {
+                filteredItem.setToOrder(wasSelected);
+            }
+            productList.add(filteredItem);
+        }
+
         adapter.notifyDataSetChanged();
     }
 

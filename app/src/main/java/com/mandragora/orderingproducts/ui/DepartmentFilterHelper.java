@@ -17,6 +17,16 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class DepartmentFilterHelper {
+    public static Department getCurrentSelectedDepartment(Spinner spinner){
+        if (spinner == null || spinner.getSelectedItem() == null){
+            return null;
+        }
+        Object selectedItem = spinner.getSelectedItem();
+        if (selectedItem instanceof Department){
+            return (Department) selectedItem;
+        }
+    return null;
+    }
 
     public static void setupDepartmentFilterSpinner(Context context, Spinner spinner, Consumer<List<Product>> onFiltered) {
         ArrayAdapter<Department> adapter = new ArrayAdapter<Department>(
@@ -59,6 +69,7 @@ public class DepartmentFilterHelper {
             public void onNothingSelected(AdapterView<?> parent) {
                 // Nie rób nic
             }
+
         });
     }
 }

@@ -45,13 +45,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         if (isSelectionMode) {
             // MainActivity Mode - show interactive elements
+            holder.checkBox.setOnCheckedChangeListener(null); // Reset listener
             holder.checkBox.setChecked(product.isToOrder());
             holder.addButton.setVisibility(View.VISIBLE);
             holder.checkBox.setVisibility(View.VISIBLE);
             holder.decreaseButton.setVisibility(View.VISIBLE);
 
             // Checkbox handling
-            holder.checkBox.setOnCheckedChangeListener(null); // Reset listener
+
             holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 product.setToOrder(isChecked);
             });
